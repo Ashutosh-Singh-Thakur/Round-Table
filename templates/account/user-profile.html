@@ -14,32 +14,34 @@
                 <div class="hero-content">
                     <div class="media media-card align-items-center shadow-none p-0 mb-0 rounded-0 bg-transparent">
                         <div class="media-img media--img">
-                            <img src="https://ui-avatars.com/api/?background=random&name=Arden+Smith" alt="avatar">
+                            <img src="https://ui-avatars.com/api/?background=random&name={{ user.name }}" alt="avatar">
                         </div>
                         <div class="media-body">
-                            <h5>Arden Smith</h5>
+                        <h5>{{ user['name'] }}</h5>
                             <small class="meta d-block lh-20 pb-2">
-                                <span>United States, member since 11 years ago</span>
+                                <span>{{ user['country'] }}, member since {{ user['created_ago'] }}</span>
                             </small>
                             <div class="stats fs-14 fw-medium d-flex align-items-center lh-18">
-                                <span class="text-black pr-2" title="Reputation">224,110</span>
+                                <span class="text-black pr-2" title="Reputation"> {{ user['reputation'] }}</span>
                                 <span class="pr-2 d-inline-flex align-items-center" title="Gold"><span
-                                        class="ball ml-1 gold"></span>16</span>
+                                        class="ball ml-1 gold"></span> {{ user['gold'] }}</span>
                                 <span class="pr-2 d-inline-flex align-items-center" title="Silver"><span
-                                        class="ball ml-1 silver"></span>93</span>
+                                        class="ball ml-1 silver"></span> {{ user['silver'] }}</span>
                                 <span class="pr-2 d-inline-flex align-items-center" title="Bronze"><span
-                                        class="ball ml-1"></span>136</span>
+                                        class="ball ml-1"></span> {{ user['bronze'] }}</span>
                             </div>
                         </div>
                     </div><!-- end media -->
                 </div><!-- end hero-content -->
             </div><!-- end col-lg-8 -->
+            {% if user['username'] == current_user.username %}
             <div class="col-lg-4">
                 <div class="hero-btn-box text-right py-3">
                     <a href="/settings" class="btn theme-btn theme-btn-outline theme-btn-outline-gray"><i
                             class="la la-gear mr-1"></i> Edit Profile</a>
                 </div>
-            </div><!-- end col-lg-4 -->
+            </div>
+            {% endif %}<!-- end col-lg-4 -->
             <div class="col-lg-12">
                 <ul class="nav nav-tabs generic-tabs generic--tabs generic--tabs-2 mt-4" id="myTab" role="tablist">
                     <li class="nav-item">
@@ -66,23 +68,40 @@
                         aria-labelledby="user-profile-tab">
                         <div class="user-panel-main-bar">
                             <div class="user-panel mb-30px">
-                                <p class="pb-2">I am a programmer. My principal language is C++. I've also done
-                                    commercial work in Java, C, Perl, Python, Javascript and APL. I've also been known
-                                    to dabble in lisp, Haskell, assembler (ARM, x86, amd64) and probably a few other
-                                    languages that haven't left as big a mark.</p>
-                                <p class="pb-2">Programmer at <a href="#"
+                                <p class="pb-2">{{ user['about']|safe() }}</p>
+                                <!--<p class="pb-2">Programmer at <a href="#"
                                         class="text-color hover-underline">Bloomberg</a>. Posts and commments are my
                                     opinions and are not sponsored or endorsed by my employer.</p>
                                 <p>If my answers helped you can <a href="#" class="text-color hover-underline">buy me a
-                                        coffee.</a></p>
+                                        coffee.</a></p>-->
                             </div><!-- end user-panel -->
                             <div class="user-panel mb-30px pt-30px border-top border-top-gray">
                                 <ul class="generic-list-item generic-list-item-bullet">
-                                    <li class="pl-3"><a href="#" class="d-inline-block">ardensmith.com</a></li>
-                                    <li class="pl-3"><a href="#" class="d-inline-block">Facebook</a></li>
-                                    <li class="pl-3"><a href="#" class="d-inline-block">Twitter</a></li>
-                                    <li class="pl-3"><a href="#" class="d-inline-block">Instagram</a></li>
-                                </ul>
+                                    {% if user['website'] %}
+                                        <li class="pl-3"><a href="{{ user['website'] }}" class="d-inline-block">Website</a></li>
+                                    {% endif %}
+                                    {% if user['twitter'] %}
+                                        <li class="pl-3"><a href="{{ user['twitter'] }}" class="d-inline-block">Twitter</a></li>
+                                    {% endif %}
+                                    {% if user['facebook'] %}
+                                        <li class="pl-3"><a href="{{ user['facebook'] }}" class="d-inline-block">Facebook</a></li>
+                                    {% endif %}
+                                    {% if user['instagrom'] %}
+                                        <li class="pl-3"><a href="{{ user['instagram'] }}" class="d-inline-block">Instagram</a></li>
+                                    {% endif %}
+                                    {% if user['linkedIn'] %}
+                                        <li class="pl-3"><a href="{{ user['linkedIn'] }}" class="d-inline-block">LinkedIn</a></li>
+                                    {% endif %}
+                                    {% if user['youtube'] %}
+                                        <li class="pl-3"><a href="{{ user['youtube'] }}" class="d-inline-block">Youtube</a></li>
+                                    {% endif %}
+                                    {% if user['vimeo'] %}
+                                        <li class="pl-3"><a href="{{ user['vimeo'] }}" class="d-inline-block">Vimeo</a></li>
+                                    {% endif %}
+                                    {% if user['github'] %}
+                                        <li class="pl-3"><a href="{{ user['github'] }}" class="d-inline-block">GitHub</a></li>
+                                    {% endif %}
+                                </ul>                                
                             </div><!-- end user-panel -->
                             <div class="user-panel mb-30px">
                                 <div class="row">

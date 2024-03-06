@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RoundTable.AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>RoundTable</title>
 
     <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com/" />
@@ -12,7 +12,8 @@
         rel="stylesheet" />
 
     <!-- Favicon -->
-    <!-- <link rel="icon" sizes="16x16" href="static/images/favicon.png" /> -->
+
+    <link rel="icon" sizes="16x16" href="static/images/favicon.png" />
 
     <!-- inject:css -->
     <link rel="stylesheet" href="static/css/bootstrap.min.css" />
@@ -20,8 +21,12 @@
     <link rel="stylesheet" href="static/css/owl.carousel.min.css" />
     <link rel="stylesheet" href="static/css/owl.theme.default.min.css" />
     <link rel="stylesheet" href="static/css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/automat/controlkit.js@master/bin/controlKit.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/sheryjs/dist/Shery.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <!-- end inject -->
 </head>
 
@@ -33,15 +38,20 @@
             <div class="row align-items-center">
                 <div class="col-lg-2">
                     <div class="logo-box">
-                        <a href="/" class="logo">RoundTable</a>
+                        <a href="/" class="logo"><img src="/static/images/logo.png" width="200px"
+                            alt="logo"></a>
                         <div class="user-action">
                             <div class="search-menu-toggle icon-element icon-element-xs shadow-sm mr-1"
-                                data-toggle="tooltip" data-placement="top" title="Search">
-                                <i class="la la-search"></i>
+                            data-toggle="tooltip" data-placement="top" title="" data-original-title="Search">
+                            <i class="la la-search"></i>
                             </div>
                             <div class="off-canvas-menu-toggle icon-element icon-element-xs shadow-sm"
                                 data-toggle="tooltip" data-placement="top" title="Main menu">
-                                <i class="la la-bars"></i>
+                                {% if current_user.is_authenticated %}<i class="la la-user"></i>
+                                <!-- Run scripts for signed-in users -->
+                                {% else %}<i class="la la-bars"></i>
+                                <!-- Run scripts for guests or signed-out users -->
+                                {% endif %} 
                             </div>
                         </div>
                     </div>
@@ -58,7 +68,7 @@
                             <!-- end ul -->
                         </nav>
                         <!-- end main-menu -->
-                        <form method="post" class="mr-4">
+                        <form action="{{ url_for('views.home') }}" method="post" class="mr-4">
                             <div class="form-group mb-0">
                                 <input class="form-control form--control form--control-bg-gray text-white" type="text"
                                     name="search" placeholder="Type your search words..." />
@@ -67,6 +77,7 @@
                                 </button>
                             </div>
                         </form>
+                        {% if not current_user.is_authenticated %}
                         <div class="nav-right-button">
                             <a href="/signin" class="btn theme-btn theme-btn-outline theme-btn-outline-white mr-2"><i
                                     class="la la-sign-in mr-1"></i>
@@ -74,6 +85,7 @@
                             <a href="/signup" class="btn theme-btn theme-btn-white"><i class="la la-user mr-1"></i> Sign
                                 up</a>
                         </div>
+                        {% endif %}
                         <!-- end nav-right-button -->
                     </div>
                     <!-- end menu-wrapper -->
@@ -94,12 +106,14 @@
                     <a href="/dashboard">Dashboard</a>
                 </li>
             </ul>
-            <div class="off-canvas-btn-box px-4 pt-5 text-center">
-                <a href="/signin" class="btn theme-btn theme-btn-sm theme-btn-outline" <i
-                    class="la la-sign-in mr-1"></i> Sign In</a>
-                <span class="fs-15 fw-medium d-inline-block mx-2">Or</span>
-                <a href="/signup" class="btn theme-btn theme-btn-sm"><i class="la la-plus mr-1"></i> Sign up</a>
-            </div>
+            {% if not current_user.is_authenticated %}
+                <div class="off-canvas-btn-box px-4 pt-5 text-center">
+                    <a href="/signin" class="btn theme-btn theme-btn-sm theme-btn-outline">
+                        <i class="la la-sign-in mr-1"></i> Sign In</a>
+                    <span class="fs-15 fw-medium d-inline-block mx-2">Or</span>
+                    <a href="/signup" class="btn theme-btn theme-btn-sm"><i class="la la-plus mr-1"></i> Sign up</a>
+                </div>
+            {% endif %}
         </div>
         <!-- end off-canvas-menu -->
         <div class="mobile-search-form">
@@ -119,6 +133,23 @@
         </div>
         <!-- end mobile-search-form -->
         <div class="body-overlay"></div>
+        <!-- flash-messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %} {% if category == 'error' %}
+        <div class="alert alert-danger alter-dismissable fade show" role="alert"> 
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% else %}
+        <div class="alert alert-success alter-dismissable fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %} {% endfor %} {% endif %} {% endwith %}
+        <!-- end flash-messages -->
     </header>
     <!-- end nav-area -->
 
@@ -491,7 +522,7 @@
                                 your path to professional
                                 fulfillment.
                             </p>
-                            <a href="/dashboard" class="btn theme-btn">Find a job <i
+                            <a href="/dashboard#jobs" class="btn theme-btn">Find a job <i
                                     class="la la-arrow-right icon ml-1"></i></a>
                         </div>
                         <!-- end card-body -->
